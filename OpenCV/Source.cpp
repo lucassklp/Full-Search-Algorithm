@@ -6,6 +6,28 @@
 using namespace std;
 using namespace cv;
 
+class Block
+{
+public:
+	Block() 
+	{
+
+	}
+	~Block();
+
+private:
+	int CornerX, CornerY, FooterX, FooterY;
+
+};
+
+Block::Block()
+{
+}
+
+Block::~Block()
+{
+}
+
 
 void OpenImage(Mat image, string windowName) {
 	namedWindow(windowName, WINDOW_AUTOSIZE);
