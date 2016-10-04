@@ -14,19 +14,22 @@ void OpenImage(Mat image, string windowName) {
 	imshow(windowName, image);
 }	
 
-int Evaluate(Rect windowSearch, Rect block, Mat Image1, Mat Image2) {
+int Evaluate(Rect comparativeBlock, Rect referencialBlock, Mat Image1, Mat Image2) {
 	
 	int evaluationFactor = 0;
 
-	for (int i = windowSearch.x; i < windowSearch.x + windowSearch.width; i++)
+	for (int i = comparativeBlock.x; i < comparativeBlock.x + comparativeBlock.width; i++)
 	{
-		for (int j = windowSearch.y; j < windowSearch.y + windowSearch.height; j++)
+		for (int j = comparativeBlock.y; j < comparativeBlock.y + comparativeBlock.height; j++)
 		{
-			int difference = std::pow(Image2.at<uchar>(i, j) - Image1.at<uchar>(i, j), 2);
+			int img2 = Image2.at<uchar>(i, j);
+
+			int img1 = Image1.at<uchar>(referencialBlock.x + i - comparativeBlock.x, referencialBlock.y + j - comparativeBlock.y);
+
+			int difference = std::pow((img2 - img1), 2);
 			evaluationFactor += difference;
 		}
 	}
-	//std::cout << "Evaluation: " << evaluationFactor << endl;
 
 	return evaluationFactor;
 }
@@ -44,34 +47,69 @@ void FullSearch(Mat image, Mat image2, int blockSize, int searchWindowSize) {
 		}
 	}
 
-	int minorValue = std::numeric_limits<int>::max();
+	list<Rect> matchingBlocks;
+
 	for (list<Rect>::iterator block = blocks.begin(); block != blocks.end(); block++)
 	{
+		
 		Point mean = Point(block->x + blockSize / 2, block->y + blockSize / 2);
 		
 		Point searchWindowAxis = Point(mean.x - searchWindowSize / 2, mean.y - searchWindowSize / 2);
 		
 		Rect searchWindow = Rect(searchWindowAxis.x, searchWindowAxis.y, searchWindowSize, searchWindowSize);
+		
 
+		Rect matchingBlock;
+		int minorValue = std::numeric_limits<int>::max();
 		for (int i = searchWindow.x; i < searchWindow.x + searchWindowSize; i++)
 		{
-			if (searchWindow.x >= 0) 
+			if (i >= 0) 
 			{
 				for (int j = searchWindow.y; j < searchWindow.y + searchWindowSize; j++)
 				{
-					if (searchWindow.y >= 0) 
+					if (j >= 0) 
 					{
-						int evaluateValue = Evaluate(Rect(i, j, searchWindowSize, searchWindowSize), Rect(block->x, block->y, block->width, block->height), image, image2);
+						int evaluateValue = Evaluate(Rect(i, j, blockSize, blockSize), Rect(block->x, block->y, block->width, block->height), image, image2);
 						
 						if (evaluateValue < minorValue) {
 							minorValue = evaluateValue;
+							matchingBlock = Rect(i, j, blockSize, blockSize);
 						}
+
+						if (minorValue == 0)
+							break;
 					}
 				}
 			}
 		}
-		std::cout << "O menor valor da avaliacao do bloco foi  " << minorValue << endl;
+		matchingBlocks.push_back(matchingBlock);
+		std::cout << "Bloco analizado: x = " << block->x << ", y = " << block->y << endl;
+		std::cout << "Menor valor: " << minorValue << endl;
+		std::cout << "Best Matching: x = " << matchingBlock.x << ", y = " << matchingBlock.y << endl <<endl;
+
+		Rect p = Rect(block->x, block->y, block->width, block->height);
+		Mat ROIAnalyzedBlock = image(p);
+
+		Mat ROIBestMatchingBlock = image2(matchingBlock);
+
+		OpenImage(ROIAnalyzedBlock, "Bloco analizado");
+		OpenImage(ROIBestMatchingBlock, "Best-matching");
+		waitKey(0);
+
+		std::cin.get();
+
+
+
+
 	}
+
+
+	//Montando as imagens lado a lado
+
+
+
+
+
 	
 	
 	//for (int i = 0; i < image.rows; i++)
@@ -90,7 +128,7 @@ int main(int argc, char** argv) {
 	Mat image = imread(argv[1], CV_LOAD_IMAGE_GRAYSCALE);
 	Mat image2 = imread(argv[2], CV_LOAD_IMAGE_GRAYSCALE);
 
-	FullSearch(image, image2, 32, 128);
+	FullSearch(image, image2, 64, 128);
 
 	OpenImage(image, "Imagem 1");
 	OpenImage(image2, "Imagem 2");

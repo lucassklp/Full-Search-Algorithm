@@ -1,9 +1,9 @@
-﻿Build started 03/10/2016 19:39:01.
+﻿Build started 04/10/2016 01:46:14.
      1>Project "C:\Users\Lucas\Documents\Visual Studio 2015\Projects\OpenCV\OpenCV\OpenCV.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
          C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\x86_amd64\CL.exe /c /IC:\opencv\build\include /ZI /nologo /W3 /WX- /sdl /Od /D _DEBUG /D _CONSOLE /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"x64\Debug\\" /Fd"x64\Debug\vc140.pdb" /Gd /TP /errorReport:prompt Source.cpp
          Source.cpp
-     1>c:\users\lucas\documents\visual studio 2015\projects\opencv\opencv\source.cpp(25): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+     1>c:\users\lucas\documents\visual studio 2015\projects\opencv\opencv\source.cpp(29): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
        Link:
          C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\x86_amd64\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\Lucas\Documents\Visual Studio 2015\Projects\OpenCV\x64\Debug\OpenCV.exe" /INCREMENTAL /NOLOGO /LIBPATH:C:\opencv\build\x64\vc14\lib opencv_world310d.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /Debug /PDB:"C:\Users\Lucas\Documents\Visual Studio 2015\Projects\OpenCV\x64\Debug\OpenCV.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\Lucas\Documents\Visual Studio 2015\Projects\OpenCV\x64\Debug\OpenCV.lib" /MACHINE:X64 x64\Debug\Source.obj
          OpenCV.vcxproj -> C:\Users\Lucas\Documents\Visual Studio 2015\Projects\OpenCV\x64\Debug\OpenCV.exe
@@ -11,4 +11,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:01.94
+Time Elapsed 00:00:01.52
