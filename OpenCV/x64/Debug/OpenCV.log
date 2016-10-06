@@ -1,5 +1,5 @@
 ﻿  Source.cpp
-d:\lucas\projetos\github\full-search-algorithm\opencv\source.cpp(25): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
-d:\lucas\projetos\github\full-search-algorithm\opencv\source.cpp(50): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
-d:\lucas\projetos\github\full-search-algorithm\opencv\source.cpp(103): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+d:\lucas\projetos\github\full-search-algorithm\opencv\source.cpp(47): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+d:\lucas\projetos\github\full-search-algorithm\opencv\source.cpp(75): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+d:\lucas\projetos\github\full-search-algorithm\opencv\source.cpp(133): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
   OpenCV.vcxproj -> D:\Lucas\Projetos\GitHub\Full-Search-Algorithm\x64\Debug\OpenCV.exe
