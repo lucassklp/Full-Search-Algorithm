@@ -20,27 +20,30 @@ void OpenImage(Mat image, string windowName) {
 }	
 
 
-void MakeImage(Mat image){
+void MakeImage(Mat image, Mat image2){
 	int width = image.cols;
 	int height = image.rows;
 	
 	
-	Mat resultImage(width, height, image.type());
+	//Mat resultImage(width, height, image.type());
 
 	for (list<pair<Rect, Rect>>::iterator match = matchingBlocks.begin(); match != matchingBlocks.end(); match++)
 	{
 		Mat matchBlock = image(match->first);
-		Mat roi = resultImage(match->second);
+		Mat roi = image2(match->second);
 		matchBlock.copyTo(roi);
 	}
 
-	OpenImage(resultImage, "Final");
+	imwrite("result.jpg", image2);
+
+
+	OpenImage(image2, "Final");
 	waitKey(0);
 
 }
 
 
-void ShowProgress(int count, Mat image) {
+void ShowProgress(int count, Mat image, Mat image2) {
 	
 	while (!isFinished)
 	{
@@ -50,14 +53,14 @@ void ShowProgress(int count, Mat image) {
 
 		if (matchingBlocks.size() == count) {
 			isFinished = true;
-			//MakeImage(image);
+			MakeImage(image, image2);
 		}
 	}
 }
 
 int EvaluateMSE(Rect currentBlock, Rect referencialBlock, Mat Image1, Mat Image2) {
 	
-	int MSE = 0;
+	int SAD = 0;
 
 	for (int y = currentBlock.y; y < currentBlock.y + currentBlock.height; y++)
 	{
@@ -73,32 +76,32 @@ int EvaluateMSE(Rect currentBlock, Rect referencialBlock, Mat Image1, Mat Image2
 			int img2 = Image2.at<uchar>(currentPoint);
 
 			int difference = pow(img2 - img1, 2);
-			MSE += difference;
+			SAD += difference;
 		}
 	}
 	
 
-	return (MSE / (currentBlock.width * currentBlock.height));
+	return (SAD);
 }
 
-void WindowSearch(Rect block, Rect blockSize, Rect searchWindowSize, Rect searchWindow, Mat image, Mat image2) {
+void WindowSearch(Rect block, Rect searchWindow, Mat image, Mat image2) {
 
 	int minorValue = std::numeric_limits<int>::max();
 	Rect matchingBlock;
 
-	for (int y = searchWindow.y; y < searchWindow.y + searchWindowSize.height; y++)
+	for (int y = searchWindow.y; y < searchWindow.y + searchWindow.height; y++)
 	{
-		if (y >= 0 && y < image.cols - block.width - 1)
+		if (y >= 0 && y < image.rows - block.height)
 		{
-			for (int x = searchWindow.x; x < searchWindow.x + searchWindowSize.width; x++)
+			for (int x = searchWindow.x; x < searchWindow.x + searchWindow.width; x++)
 			{
-				if (x >= 0 && x < image.rows - block.height - 1)
+				if (x >= 0 && x < image.cols - block.width)
 				{
-					int SADValue = EvaluateMSE(Rect(x, y, blockSize.width, blockSize.height), block, image, image2);
+					int SADValue = EvaluateMSE(Rect(x, y, block.width, block.height), block, image, image2);
 
 					if (SADValue < minorValue) {
 						minorValue = SADValue;
-						matchingBlock = Rect(x, y, blockSize.width, blockSize.height);
+						matchingBlock = Rect(x, y, block.width, block.height);
 					}
 				}
 			}
@@ -121,9 +124,9 @@ void WindowSearch(Rect block, Rect blockSize, Rect searchWindowSize, Rect search
 void FullSearch(Mat image, Mat image2, Rect blockSize, Rect searchWindowSize) {
 	list<Rect> blocks = list<Rect>();
 	
-	for (int y = 0; y < image.rows - 1; y += blockSize.height)
+	for (int y = 0; y < image.rows; y += blockSize.height)
 	{
-		for (int x = 0; x < image.cols - 1; x += blockSize.width)
+		for (int x = 0; x < image.cols; x += blockSize.width)
 		{
 			Rect p = Rect(x, y, blockSize.width, blockSize.height);
 			blocks.push_back(p);
@@ -131,7 +134,7 @@ void FullSearch(Mat image, Mat image2, Rect blockSize, Rect searchWindowSize) {
 	}
 
 	int count = blocks.size();
-	thread progressWatcher(ShowProgress, count, image);
+	thread progressWatcher(ShowProgress, count, image, image2);
 	progressWatcher.detach();
 
 	for (list<Rect>::iterator block = blocks.begin(); block != blocks.end(); block++)
@@ -140,7 +143,7 @@ void FullSearch(Mat image, Mat image2, Rect blockSize, Rect searchWindowSize) {
 		Point searchWindowAxis = Point(mean.x - searchWindowSize.width / 2, mean.y - searchWindowSize.height / 2);		
 		Rect searchWindow = Rect(searchWindowAxis.x, searchWindowAxis.y, searchWindowSize.width, searchWindowSize.height);
 
-		thread AnalyzeWindow(WindowSearch, Rect(block->x, block->y, block->width, block->height), blockSize, searchWindowSize, searchWindow, image, image2);
+		thread AnalyzeWindow(WindowSearch, Rect(block->x, block->y, block->width, block->height), searchWindow, image, image2);
 		AnalyzeWindow.detach();
 	}
 }
@@ -149,12 +152,10 @@ int main(int argc, char** argv) {
 	Mat image = imread(argv[1], CV_LOAD_IMAGE_GRAYSCALE);
 	Mat image2 = imread(argv[2], CV_LOAD_IMAGE_GRAYSCALE);
 	
-	FullSearch(image, image2, Rect(0, 0, 16, 16), Rect(0, 0, 64, 64));
+	FullSearch(image, image2, Rect(0, 0, 64, 64), Rect(0, 0, 128, 128));
 
 	OpenImage(image, "Imagem 1");
-	OpenImage(image2, "Imagem 2");
-
-
+	//OpenImage(image2, "Imagem 2");
 
 	waitKey(0);
 }

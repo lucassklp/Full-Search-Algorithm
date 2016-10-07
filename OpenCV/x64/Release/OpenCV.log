@@ -1,5 +1,4 @@
-﻿  Source.cpp
-Source.cpp(25): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
-Source.cpp(50): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
-Source.cpp(103): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
-LINK : fatal error LNK1181: cannot open input file 'opencv_world310.dll'
+﻿  Generating code
+  All 444 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  Finished generating code
+  OpenCV.vcxproj -> D:\Lucas\Projetos\GitHub\Full-Search-Algorithm\x64\Release\OpenCV.exe
