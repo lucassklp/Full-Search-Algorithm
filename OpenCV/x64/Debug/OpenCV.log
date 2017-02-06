@@ -1,3 +1,2 @@
 ﻿  Source.cpp
-c:\users\lucas simas\documents\github\full-search-algorithm\opencv\source.cpp(130): warning C4244: '+=': conversion from 'double' to 'int', possible loss of data
   OpenCV.vcxproj -> C:\Users\Lucas Simas\Documents\GitHub\Full-Search-Algorithm\x64\Debug\OpenCV.exe

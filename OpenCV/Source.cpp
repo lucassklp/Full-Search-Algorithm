@@ -1,26 +1,16 @@
-//
 #define IMAGE_WIDTH 480
 #define IMAGE_HEIGHT 272
-
 #define BLOCK_WIDTH 16 
 #define BLOCK_HEIGHT 16
-
 #define WINDOW_SEARCH_WIDTH 32
 #define WINDOW_SEARCH_HEIGHT 32
 
-
-//
 //#define IMAGE_WIDTH 1920
 //#define IMAGE_HEIGHT 1088
-//
 //#define BLOCK_WIDTH 64 
 //#define BLOCK_HEIGHT 64
-//
 //#define WINDOW_SEARCH_WIDTH 128
 //#define WINDOW_SEARCH_HEIGHT 128
-
-
-
 
 #include "opencv2/objdetect.hpp"
 #include "opencv2/highgui.hpp"
@@ -127,11 +117,11 @@ int EvaluateSAD(int row, int column, int cx, int cy)
 	{
 		for (int x = row; x < row + BLOCK_HEIGHT; x++)
 		{
-			SAD += pow(img2[x][y] - img1[cx + x - row][cy + y - column], 2);
+			SAD += img2[x][y] - img1[cx + x - row][cy + y - column];
 		}
 	}
 
-	return (SAD);
+	return SAD;
 }
 
 
