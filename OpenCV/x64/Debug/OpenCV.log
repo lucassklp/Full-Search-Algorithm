@@ -1,2 +1,3 @@
 ﻿  Source.cpp
+c:\users\lucas simas\documents\github\full-search-algorithm\opencv\source.cpp(38): warning C4101: 'PNSR': unreferenced local variable
   OpenCV.vcxproj -> C:\Users\Lucas Simas\Documents\GitHub\Full-Search-Algorithm\x64\Debug\OpenCV.exe
